@@ -3,11 +3,13 @@ require_relative '../lib/todo_list'
 require_relative '../lib/exceptions'
 
 describe TodoList do
-  subject(:list)            { TodoList.new(db: database) }
+  subject(:list)            { TodoList.new(db: database, social_network: social_network) }
   let(:database)            { stub }
   let(:item)                { Struct.new(:title,:description).new(title,description) }
   let(:title)               { "Shopping" }
   let(:description)         { "Go to the shop and buy toilet paper and toothbrush" }
+  let(:status) {false}
+  let (:social_network) {stub}
 
   it "should raise an exception if the database layer is not provided" do
     expect{ TodoList.new(db: nil) }.to raise_error(IllegalArgument)
@@ -29,18 +31,22 @@ describe TodoList do
     list.size.should == 6
   end
 
-  it "should persist the added item" do
+   it "should persist the added item" do
+    stub(database).items_count { 1 }
     mock(database).add_todo_item(item) { true }
     mock(database).get_todo_item(0) { item }
+    stub(social_network).spam {true}
 
     list << item
     list.first.should == item
   end
 
-  it "should persist the state of the item" do
-    mock(database).todo_item_completed?(0) { false }
+ it "should persist the state of the item" do
+    mock(database).get_todo_item(0) { item }
+    mock(database).completed_item?(0) { false }
     mock(database).complete_todo_item(0,true) { true }
-    mock(database).todo_item_completed?(0) { true }
+    mock(database).get_todo_item(0) { item }
+    mock(database).completed_item?(0) { true }
     mock(database).complete_todo_item(0,false) { true }
 
     list.toggle_state(0)
@@ -48,6 +54,7 @@ describe TodoList do
   end
 
   it "should fetch the first item from the DB" do
+    stub(database).items_count { 1 }
     mock(database).get_todo_item(0) { item }
     list.first.should == item
 
@@ -74,4 +81,80 @@ describe TodoList do
       list << item
     end
   end
+  context "with nil item" do
+    let(:item) { nil }
+
+    it "shoul raise an exception when changing the item state if the item is nil" do
+      mock(database).get_todo_item(0) { item }
+      expect{ list.toggle_state(0)}.to raise_error(Exception)
+
+    end
+
+    it "shoul not accept nil item" do
+      dont_allow(database).add_todo_item(item)
+
+      list << item
+    end
+  end
+
+
+  context "with too short title :(" do
+    let(:title) {"S"}
+
+    it "should not accept an aitem with too short title" do
+      dont_allow(database).add_todo_item(item)
+
+      list << item
+    end
+  end
+
+  context "with missing descript" do
+    let(:description) {""}
+
+    it "should accept an item with missing description" do
+      stub(database).items_count { 1 }
+      mock(database).add_todo_item(item) { true }
+      mock(database).get_todo_item(0) { item }
+      stub(social_network).spam {true}
+
+      list << item
+      list.first.should == item
+    end
+  end
+  
+  context "with nil social network" do
+    let(:social_network)    { nil }
+
+    it "doesn't spam social network when item is being added to list if social network is nil" do
+      stub(database).items_count { 1 }
+      mock(database).add_todo_item(item) { true }
+
+      dont_allow(social_network).spam(item[:title] + " added!")
+      list << item
+    end
+	 it "shoul cut too long title when item is completed" do
+	mock(social_network).spam(item[:short_title]) {true}
+    
+	mock(database).get_todo_item(0) {item}
+	mock(database).todo_item_completed?(0) {false}
+	mock(database).complete_todo_item(0, true)
+
+	list.toggle_state(0)
+      end
+  end
+
+  context "with provided social network" do
+
+    it "spams social network when item is being added to list if social network is provided" do
+      stub(database).items_count { 1 }
+      mock(database).add_todo_item(item) { true }
+      mock(social_network).spam(item[:title] + " added!") {true}
+
+      list << item
+      #it should be enough - mock determines, if this test passes or not - if spam method is called or not!
+    end
+  end    
+     
+  
+    
 end

@@ -6,6 +6,7 @@ class TodoList
       raise IllegalArgument
     elsif
       @database = items[:db]
+      @social_network = items[:social_network]
     end
   end
 
@@ -18,28 +19,30 @@ class TodoList
   end
 
   def << (other_object)
-    if other_object == nil
-      raise IllegalArgument  
-    elsif other_object[:title] == ""
-      nil  
+    if other_object.nil? || other_object[:title] == "" || other_object[:title].size < 3
+      nil
     else
       @database.add_todo_item(other_object)
+      if @social_network != nil
+        @social_network.spam(other_object[:title] + " added!")
+      end
     end
+#    other_object[:title] == "" ? nil : @database.add_todo_item(other_object)
   end
 
   def first
-    @database.get_todo_item(0)
+    self.size == 0 ? nil : @database.get_todo_item(0)
   end
 
   def last
-    @database.get_todo_item(self.size - 1)
+    self.size == 0 ? nil : @database.get_todo_item(self.size - 1)
   end
-  
+
   def toggle_state(index)
-    if @database.todo_item_completed?(index)
-      @database.complete_todo_item(0, true)
+    if @database.get_todo_item(index) == nil
+      raise Exception
     else
-      @database.complete_todo_item(index, false)
+      @database.completed_item?(index) ? @database.complete_todo_item(index,false) : @database.complete_todo_item(index, true)
     end
   end
 end
