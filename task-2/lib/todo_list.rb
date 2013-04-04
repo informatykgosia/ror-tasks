@@ -22,6 +22,7 @@ class TodoList
     if other_object.nil? || other_object[:title] == "" || other_object[:title].size < 3
       nil
     else
+      
       @database.add_todo_item(other_object)
       if @social_network != nil
         @social_network.spam(other_object[:title] + " added!")
