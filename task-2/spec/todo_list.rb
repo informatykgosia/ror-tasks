@@ -151,7 +151,6 @@ describe TodoList do
       mock(social_network).spam(item[:title] + " added!") {true}
 
       list << item
-      #it should be enough - mock determines, if this test passes or not - if spam method is called or not!
     end
   end    
      
