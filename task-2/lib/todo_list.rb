@@ -1,6 +1,5 @@
 class TodoList
 
-  # Initialize the TodoList with +items+ (empty by default).
   def initialize(items=[])
     if items[:db] == nil
       raise IllegalArgument
@@ -28,7 +27,6 @@ class TodoList
         @social_network.spam(other_object[:title] + " added!")
       end
     end
-#    other_object[:title] == "" ? nil : @database.add_todo_item(other_object)
   end
 
   def first
