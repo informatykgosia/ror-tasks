@@ -1,0 +1,24 @@
+first_item:
+  title: "Pierwszy wpis"
+  date_due: <%= Time.parse("25/05/2012") %>
+  todo_list: first_list
+  description: "Happiness can be found, even in the darkest of times, if one only remembers to turn on the light."
+second_todo_item:
+  title: "Drugi wpis"
+  date_due: <%= Time.parse("25/05/2011") %>
+  todo_list: second_list
+  description: "As much money and life as you could want!  The two things most human beings would choose above all - the trouble is, humans do have a knack of choosing precisely those things that are worst for them. "
+third_todo_item:
+  title: "Trzeci wpis"
+  date_due: <%= Time.parse("25/05/2010") %>
+  todo_list: first_list
+  description: "After all, to the well-organized mind, death is but the next great adventure."
+fourth_todo_item:
+  title: "Czwarty wpis"
+  date_due: <%= Time.parse("25/05/2009") %>
+  todo_list: first_list
+  description: "It does not do to dwell on dreams and forget to live, remember that."
+fifth_todo_item:
+  title: "ZZZ last"
+  date_due: <%= Time.parse("25/05/2009") %>
+  todo_list: second_list

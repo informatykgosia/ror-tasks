@@ -1,0 +1,12 @@
+#encoding: utf-8
+first_user:
+  name: "Gosia"
+  surname: "Nowak"
+  email: "lubiepracowac@gmail.com"
+  password: "$2a$10$3pz33hgfdiAL4aIetMC1F.G803BnEcSwZO/AYU.Xivvr9EdSXXowi"
+second_user:
+  name: "Jacek"
+  surname: "Placek"
+  email: "jacek@gmail.com"
+  password: "$2a$10$3pz33hgfdiAL4aIetMC1F.G803BnEcSwZO/AYU.Xivvr9EdSXXowi"
+  failed_login_count: 4
