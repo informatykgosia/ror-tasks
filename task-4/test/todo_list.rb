@@ -30,7 +30,7 @@ describe TodoList do
 
   it "should find all lists of given user" do
     add_list
-    TodoList.find_by_user(User.find_by_email("jan.bator@gmail.com")).count.should == 2
+    TodoList.find_by_user(User.find_by_email("lubiepracowac@gmail.com")).count.should == 2
   end
 
   it "should find list by id and egearly load its items" do
